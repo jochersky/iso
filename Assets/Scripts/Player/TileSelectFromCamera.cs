@@ -4,12 +4,6 @@ public class TileSelectFromCamera : MonoBehaviour
 {
     [SerializeField] Camera cam;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -25,7 +19,7 @@ public class TileSelectFromCamera : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 100))
             {
-                Debug.Log(hit.transform.name);
+                hit.transform.Rotate(0f, 0f, 90f);
             }
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +15,7 @@ public class CameraLook : MonoBehaviour
     Camera cam;
 
     float _yRotation;
+    Boolean _rotateCam;
 
     private void Start()
     {
@@ -22,12 +24,27 @@ public class CameraLook : MonoBehaviour
 
     private void Update()
     {
+        ZoomCamera();
+        RotateCamera();
+    }
+
+    private void ZoomCamera()
+    {
         float zoomValue = cam.orthographicSize - Input.mouseScrollDelta.y * zoomSensitivity;
         cam.orthographicSize = Mathf.Clamp(zoomValue, minZoom, maxZoom);
+    }
 
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * mouseSensitivity;
-        _yRotation += mouseX;
-        transform.rotation = Quaternion.Euler(xRotation, _yRotation, 0); // Rotate cam
-        playerOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate player's movement orientation
+    private void RotateCamera()
+    {
+        if (Input.GetMouseButtonDown(1)) _rotateCam = true;
+        if (Input.GetMouseButtonUp(1)) _rotateCam = false;
+        
+        if (_rotateCam)
+        {
+            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * mouseSensitivity;
+            _yRotation += mouseX;
+            transform.rotation = Quaternion.Euler(xRotation, _yRotation, 0); // Rotate cam
+            playerOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate player's movement orientation
+        }
     }
 }
