@@ -7,6 +7,7 @@ public class CameraLook : MonoBehaviour
 {
     [SerializeField] StateSelect stateSelect;
     [SerializeField] GameObject playerOrientation;
+    [SerializeField] GameObject flatCameraOrientation;
     [SerializeField] float xRotation = 33f;
     [SerializeField] float mouseSensitivity = 15f;
     [SerializeField] float zoomSensitivity = 2f;
@@ -76,6 +77,7 @@ public class CameraLook : MonoBehaviour
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * mouseSensitivity;
             _yRotation += mouseX;
             transform.rotation = Quaternion.Euler(xRotation, _yRotation, 0); // Rotate cam
+            flatCameraOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate cam's movement orientation
             playerOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate player's movement orientation
         }
     }
@@ -90,9 +92,10 @@ public class CameraLook : MonoBehaviour
     {
         // Set the move direction to be aligned with how the camera is rotated.
         moveVector = playerOrientation.transform.right * moveVector.x + playerOrientation.transform.forward * moveVector.y;
+        moveVector.y = 0f;
         moveVector = moveVector.normalized;
 
-        transform.position = new Vector3(transform.position.x + moveVector.x, transform.position.y, transform.position.z + moveVector.y);
+        transform.position += moveVector;
     }
 
     private void ChangePlayState()
