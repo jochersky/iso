@@ -9,6 +9,7 @@ public class CameraLook : MonoBehaviour
     [SerializeField] GameObject playerOrientation;
     [SerializeField] GameObject flatCameraOrientation;
     [SerializeField] float xRotation = 33f;
+    [SerializeField] Vector3 camPosFromGround = new Vector3(30, 30, 30);
     [SerializeField] float mouseSensitivity = 15f;
     [SerializeField] float zoomSensitivity = 2f;
     [SerializeField] float maxZoom = 30f;
@@ -46,7 +47,7 @@ public class CameraLook : MonoBehaviour
         // Ensure no independent camera movement when player is in play mode
         if (playEnabled)
         {
-            transform.position = playerOrientation.transform.position;
+            // transform.position = playerOrientation.transform.position; TODO
             return;
         }
 
@@ -76,7 +77,8 @@ public class CameraLook : MonoBehaviour
         {
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * mouseSensitivity;
             _yRotation += mouseX;
-            transform.rotation = Quaternion.Euler(xRotation, _yRotation, 0); // Rotate cam
+            transform.RotateAround(playerOrientation.transform.position, Vector3.up, _yRotation * Time.deltaTime);
+            // transform.rotation = Quaternion.Euler(xRotation, _yRotation, 0); // Rotate cam
             flatCameraOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate cam's movement orientation
             playerOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate player's movement orientation
         }
