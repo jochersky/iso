@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BlockSelect : MonoBehaviour
@@ -59,39 +60,26 @@ public class BlockSelect : MonoBehaviour
             // TODO: make it so that the player needs to drag on the move icon to translate a block.
             if (_movingBlock)
             {
-                Plane translationPlane = new Plane(selectedBlock.transform.up, 0);
+                Plane translationPlane = new Plane(Vector3.down, 0);
                 Ray mouseRay = cam.ScreenPointToRay(Input.mousePosition);
 
                 if (translationPlane.Raycast(mouseRay, out float distance))
                 {
                     Vector3 newPos = mouseRay.GetPoint(distance);
-                    Debug.DrawLine(Vector3.up, newPos);
-                    // selectedBlock.transform.position = newPos;
-                    selectedBlock.transform.position = new Vector3(newPos.x, selectedBlock.transform.position.y, newPos.y);
+                    newPos = NearestUnitCoords(newPos);
+
+                    selectedBlock.transform.position = newPos;
                 }
             }
-
-            // if (Input.GetMouseButtonDown(0)) _movingBlock = true;
-
-            // if (_movingBlock)
-            // {
-            //     if (!blockSelected)
-            //     {
-            //         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            //         RaycastHit hit;
-
-            //         if (Physics.Raycast(ray, out hit, rayDistance, mask))
-            //         {
-            //             blockSelected = true;
-            //             selectedBlock = hit;
-            //         }
-            //     }
-
-            //     Vector3 newBlockPos = new Vector3(Input.mousePosition.x, 0, Input.mousePosition.z).normalized;
-            //     newBlockPos.y = selectedBlock.transform.position.y;
-            //     selectedBlock.transform.position = newBlockPos;
-            // }
         }
+    }
+
+    private Vector3 NearestUnitCoords(Vector3 v)
+    {
+        v.x = Mathf.Round(v.x);
+        v.y = Mathf.Round(v.y);
+        v.z = Mathf.Round(v.z);
+        return v;
     }
 
     private void ChangePlayState()
