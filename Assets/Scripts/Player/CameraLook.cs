@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.InputSystem;
 
 public class CameraLook : MonoBehaviour
@@ -9,8 +10,7 @@ public class CameraLook : MonoBehaviour
     [SerializeField] GameObject playerOrientation;
     [SerializeField] GameObject flatCameraOrientation;
     [SerializeField] float xRotation = 33f;
-    [SerializeField] Vector3 camPosFromGround = new Vector3(30, 30, 30);
-    [SerializeField] float mouseSensitivity = 15f;
+    [SerializeField] float mouseSensitivity = 5f;
     [SerializeField] float zoomSensitivity = 2f;
     [SerializeField] float maxZoom = 30f;
     [SerializeField] float minZoom = 1f;
@@ -19,6 +19,8 @@ public class CameraLook : MonoBehaviour
     Camera cam;
 
     float _yRotation;
+    float radius = 50f;
+    float _zoom = 20f;
     bool _rotateCam;
     bool playEnabled = true;
 
@@ -27,6 +29,7 @@ public class CameraLook : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
+        // transform.position = playerOrientation.transform.position - (transform.forward * radius) + Vector3.up;
     }
 
     private void OnEnable()
@@ -47,14 +50,14 @@ public class CameraLook : MonoBehaviour
         // Ensure no independent camera movement when player is in play mode
         if (playEnabled)
         {
-            // transform.position = playerOrientation.transform.position; TODO
+            transform.position = playerOrientation.transform.position - (transform.forward * radius) + Vector3.up;
             return;
         }
 
         GetInput();
     }
 
-    private void FixedUpdate()
+  private void FixedUpdate()
     {
         // Ensure no independent camera movement when player is in play mode
         if (playEnabled) return;
@@ -64,8 +67,9 @@ public class CameraLook : MonoBehaviour
 
     private void ZoomCamera()
     {
-        float zoomValue = cam.orthographicSize - Input.mouseScrollDelta.y * zoomSensitivity;
-        cam.orthographicSize = Mathf.Clamp(zoomValue, minZoom, maxZoom);
+        float newZoom = _zoom - Input.mouseScrollDelta.y * zoomSensitivity;
+        _zoom = Mathf.Clamp(newZoom, minZoom, maxZoom);
+        cam.orthographicSize = _zoom;
     }
 
     private void RotateCamera()
@@ -75,12 +79,10 @@ public class CameraLook : MonoBehaviour
 
         if (_rotateCam)
         {
-            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * mouseSensitivity;
-            _yRotation += mouseX;
-            transform.RotateAround(playerOrientation.transform.position, Vector3.up, _yRotation * Time.deltaTime);
-            // transform.rotation = Quaternion.Euler(xRotation, _yRotation, 0); // Rotate cam
-            flatCameraOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate cam's movement orientation
-            playerOrientation.transform.rotation = Quaternion.Euler(0, _yRotation, 0); // Rotate player's movement orientation
+            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+            transform.RotateAround(playerOrientation.transform.position, Vector3.up, mouseX); // Rotate camera around player orienation
+
+            playerOrientation.transform.RotateAround(playerOrientation.transform.position, Vector3.up, mouseX); // Rotate player's movement orientation
         }
     }
 
