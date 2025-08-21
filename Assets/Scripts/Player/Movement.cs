@@ -90,15 +90,5 @@ public class Movement : MonoBehaviour
     private void ChangePlayState()
     {
         playEnabled = !playEnabled;
-
-        // Change material to indicate whether play state is enabled
-        // if (!playEnabled)
-        // {
-
-        // }
-        // else
-        // {
-
-        // }
     }
 }

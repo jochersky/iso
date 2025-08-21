@@ -105,6 +105,6 @@ public class CameraLook : MonoBehaviour
     private void ChangePlayState()
     {
         playEnabled = !playEnabled;
-        transform.SetPositionAndRotation(playerOrientation.transform.position, transform.rotation);
+        if (playEnabled) transform.position = playerOrientation.transform.position - (transform.forward * radius) + Vector3.up;
     }
 }

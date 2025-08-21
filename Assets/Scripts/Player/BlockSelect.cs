@@ -35,8 +35,7 @@ public class BlockSelect : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 _movingBlock = false;
-                // blockSelected = false;
-                // selectedBlock = new RaycastHit();
+                blockSelected = false;
             }
 
             if (Input.GetMouseButton(0))
