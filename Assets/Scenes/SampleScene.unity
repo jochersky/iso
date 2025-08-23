@@ -241,7 +241,7 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.01
+  m_SkinWidth: 0.05
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &179182321
@@ -256,10 +256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea5c25e5b6de1645b35a858390fea29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxMoveSpeed: 10
+  MoveAccel: 30
+  StopDrag: 0.9
+  Gravity: -9.8
   orientation: {fileID: 1274659108}
   stateSelect: {fileID: 1972842805}
-  MovementSpeed: 10
-  Gravity: -30
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
