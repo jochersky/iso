@@ -43,26 +43,32 @@ public class Movement : MonoBehaviour
         ApplyGravity();    
     }
 
-  public void Move(Vector2 moveInputVec)
+    public void Move(Vector2 moveInputVec)
     {
         // Ensure the player is in the play state before handling movement
         if (!playEnabled) return;
 
         if (moveInputVec != Vector2.zero)
         {
-            Vector3 moveDir = orientation.transform.forward * moveInputVec.y + orientation.transform.right * moveInputVec.x;
-            currentSpeed += MoveAccel * Time.deltaTime;
-            currentSpeed = Mathf.Min(currentSpeed, MaxMoveSpeed);
-            _moveVelocity = currentSpeed * moveDir;
-
-            _characterController.Move(_moveVelocity * Time.deltaTime);
+            ApplyMove(moveInputVec);
         }
         else
         {
             ApplyStopDrag();
-            _characterController.Move(_moveVelocity * Time.deltaTime);
         }
 
+        ApplyGravity();
+
+        Vector3 finalMove = _moveVelocity + _verticalVelocity;
+        _characterController.Move(finalMove * Time.deltaTime);
+    }
+
+    private void ApplyMove(Vector2 moveInputVec)
+    {
+        Vector3 moveDir = orientation.transform.forward * moveInputVec.y + orientation.transform.right * moveInputVec.x;
+        currentSpeed += MoveAccel * Time.deltaTime;
+        currentSpeed = Mathf.Min(currentSpeed, MaxMoveSpeed);
+        _moveVelocity = currentSpeed * moveDir;
     }
 
     private void ApplyStopDrag()
@@ -77,11 +83,11 @@ public class Movement : MonoBehaviour
         if (_characterController.isGrounded)
         {
             // Need to have small amount of gravity even when on ground for character controller.
-            _moveVelocity.y = -0.05f;
+            _verticalVelocity.y = -0.05f;
         }
         else
         {
-            _moveVelocity.y = Gravity * Time.deltaTime;
+            _verticalVelocity.y += Gravity * Time.deltaTime;
         }
     }
 
