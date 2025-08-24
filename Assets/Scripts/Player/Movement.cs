@@ -1,29 +1,31 @@
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] StateSelect stateSelect;
+    [Header("Movement Properties")]
+    [SerializeField] float MaxMoveSpeed = 1f;
+    [SerializeField] float MoveAccel = 0.5f;
+    [SerializeField] float StopDrag = 0.6f;
+    [SerializeField] float Gravity = -9.8f;
+    private float MoveDrag;
 
-    [Header("Movement")]
-    [SerializeField] float moveSpeed = 20f;
-    [SerializeField] float groundDrag;
-
-    [Header("Ground Check")]
-    [SerializeField] float playerHeight = 2.0f;
-    [SerializeField] LayerMask Ground;
-    bool grounded;
-
+    [Header("References")]
     [SerializeField] GameObject orientation;
+    [SerializeField] StateSelect stateSelect;
+    private CharacterController _characterController;
 
-    Rigidbody rb;
-
-    Vector3 moveVector;
-
+    private Vector3 _moveVelocity;
+    private Vector3 _verticalVelocity;
+    private float currentSpeed;
     bool playEnabled = true;
 
-    void Start()
+    private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        _characterController = GetComponent<CharacterController>();
     }
 
     private void OnEnable()
@@ -36,54 +38,56 @@ public class Movement : MonoBehaviour
         stateSelect.togglePressed -= ChangePlayState;
     }
 
-  void Update()
-    {
-        // Ensure the player is in the play state before handling movement
-        if (!playEnabled) return;
-
-        // Send raycast (from position, which direction, what length, what layer mask)
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, Ground);
-
-        GetInput();
-        SpeedControl();
-
-        if (grounded)
-            rb.linearDamping = groundDrag;
-        else
-            rb.linearDamping = 0f;
-    }
-
     private void FixedUpdate()
     {
+        ApplyGravity();    
+    }
+
+    public void Move(Vector2 moveInputVec)
+    {
         // Ensure the player is in the play state before handling movement
         if (!playEnabled) return;
 
-        MovePlayer();
-    }
-
-    void GetInput()
-    {
-        moveVector.x = Input.GetAxisRaw("Horizontal");
-        moveVector.y = Input.GetAxisRaw("Vertical");
-    }
-
-    void MovePlayer()
-    {
-        // Set the move direction to be aligned with how the camera is rotated.
-        moveVector = orientation.transform.right * moveVector.x + orientation.transform.forward * moveVector.y;
-        moveVector = moveVector.normalized;
-
-        rb.AddForce(moveVector * moveSpeed, ForceMode.Force);
-    }
-
-    void SpeedControl()
-    {
-        Vector3 flatVelo = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.y);
-
-        if (flatVelo.magnitude > moveSpeed)
+        if (moveInputVec != Vector2.zero)
         {
-            Vector3 limitedVelo = flatVelo.normalized * moveSpeed;
-            rb.linearVelocity = new Vector3(limitedVelo.x, rb.linearVelocity.y, limitedVelo.z);
+            ApplyMove(moveInputVec);
+        }
+        else
+        {
+            ApplyStopDrag();
+        }
+
+        ApplyGravity();
+
+        Vector3 finalMove = _moveVelocity + _verticalVelocity;
+        _characterController.Move(finalMove * Time.deltaTime);
+    }
+
+    private void ApplyMove(Vector2 moveInputVec)
+    {
+        Vector3 moveDir = orientation.transform.forward * moveInputVec.y + orientation.transform.right * moveInputVec.x;
+        currentSpeed += MoveAccel * Time.deltaTime;
+        currentSpeed = Mathf.Min(currentSpeed, MaxMoveSpeed);
+        _moveVelocity = currentSpeed * moveDir;
+    }
+
+    private void ApplyStopDrag()
+    {
+        currentSpeed = 0;
+        _moveVelocity.x *= StopDrag;
+        _moveVelocity.z *= StopDrag;
+    }
+
+    private void ApplyGravity()
+    {
+        if (_characterController.isGrounded)
+        {
+            // Need to have small amount of gravity even when on ground for character controller.
+            _verticalVelocity.y = -0.05f;
+        }
+        else
+        {
+            _verticalVelocity.y += Gravity * Time.deltaTime;
         }
     }
 
