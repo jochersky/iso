@@ -29,7 +29,6 @@ public class CameraLook : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
-        // transform.position = playerOrientation.transform.position - (transform.forward * radius) + Vector3.up;
     }
 
     private void OnEnable()

@@ -65,6 +65,7 @@ public class BlockSelect : MonoBehaviour
                 if (translationPlane.Raycast(mouseRay, out float distance))
                 {
                     Vector3 newPos = mouseRay.GetPoint(distance);
+                    newPos.y = selectedBlock.transform.position.y;
                     newPos = NearestUnitCoords(newPos);
 
                     selectedBlock.transform.position = newPos;
@@ -76,7 +77,7 @@ public class BlockSelect : MonoBehaviour
     private Vector3 NearestUnitCoords(Vector3 v)
     {
         v.x = Mathf.Round(v.x);
-        v.y = Mathf.Round(v.y);
+        // v.y = Mathf.Round(v.y);
         v.z = Mathf.Round(v.z);
         return v;
     }
