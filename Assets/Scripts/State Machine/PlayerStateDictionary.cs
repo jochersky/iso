@@ -19,4 +19,9 @@ public class PlayerStateDictionary
   {
     _context = currentContext;
   }
+
+  public PlayerBaseState Grounded()
+  {
+    return _states[PlayerStates.grounded];
+  }
 }

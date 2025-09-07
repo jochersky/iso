@@ -18,10 +18,16 @@ public abstract class PlayerBaseState
     _dictionary = playerStateDictionary;
   }
 
+  // First method run after a state is entered
   public abstract void EnterState();
+
+  // Method where state behavior is run. per frame state transitions checks done here
   public abstract void UpdateState();
+
+  // Last method run after a state is exited
   public abstract void ExitState();
-  public abstract void CheckSwitchStates();
+
+  // For root states that initialize sub states
   public abstract void InitializeSubState();
 
   protected void SwitchState(PlayerBaseState newState)
