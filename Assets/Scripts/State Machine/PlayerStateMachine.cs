@@ -56,7 +56,7 @@ public class PlayerStateMachine : MonoBehaviour
     public Vector3 ForwardDir { get { return _orientation.transform.forward; } }
     public Vector3 RightDir { get { return _orientation.transform.right; } }
 
-    void Start()
+    void Awake()
     {
         // Initialize references
         _characterController = GetComponent<CharacterController>();

@@ -120,7 +120,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9168317359442971850}
   - component: {fileID: 4720345041794419455}
-  - component: {fileID: 4976008278961193565}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -157,19 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc70730456e2324d9dd23a0d812a0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4976008278961193565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2025246643607164591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de08e86ef10adb4a82a2e1d55bc43d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterMover: {fileID: 479850830295902277}
 --- !u!1 &4320979231055097604
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +472,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3138295438268860752}
   - component: {fileID: 339569031954374647}
-  - component: {fileID: 479850830295902277}
+  - component: {fileID: 1533398889520695290}
   m_Layer: 0
   m_Name: Player Body
   m_TagString: Player
@@ -536,7 +522,7 @@ CharacterController:
   m_SkinWidth: 0.05
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &479850830295902277
+--- !u!114 &1533398889520695290
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -545,15 +531,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5526721652672277135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ea5c25e5b6de1645b35a858390fea29, type: 3}
+  m_Script: {fileID: 11500000, guid: afd59ab9b2c2a504e9890679bd21595c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxMoveSpeed: 10
-  MoveAccel: 30
-  StopDrag: 0.9
-  Gravity: -9.8
-  orientation: {fileID: 2005982427316136009}
-  stateSelect: {fileID: 4720345041794419455}
+  _orientation: {fileID: 2005982427316136009}
+  _stateSelect: {fileID: 4720345041794419455}
+  _maxMoveSpeed: 10
+  _moveAccel: 30
+  _stopDrag: 0.9
+  _gravity: -9.8
 --- !u!1 &8702892534486203333
 GameObject:
   m_ObjectHideFlags: 0
