@@ -3,6 +3,7 @@ using System.Collections.Generic;
 enum PlayerStates
 {
   // - Root States -
+  levelEdit,
   grounded,
   fall,
   // - Sub States -
@@ -18,7 +19,8 @@ public class PlayerStateDictionary
   public PlayerStateDictionary(PlayerStateMachine currentContext)
   {
     _context = currentContext;
-    
+
+    _states[PlayerStates.levelEdit] = new PlayerLevelEditState(_context, this);
     _states[PlayerStates.grounded] = new PlayerGroundedState(_context, this);
     _states[PlayerStates.fall] = new PlayerFallState(_context, this);
 
@@ -27,6 +29,10 @@ public class PlayerStateDictionary
   }
 
   // - Root States -
+  public PlayerBaseState LevelEdit()
+  {
+    return _states[PlayerStates.levelEdit];
+  }
   public PlayerBaseState Grounded()
   {
     return _states[PlayerStates.grounded];

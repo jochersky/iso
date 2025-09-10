@@ -22,7 +22,7 @@ public class PlayerStateMachine : MonoBehaviour
     private Vector3 _moveVelocity;
     private Vector3 _verticalVelocity;
     private float _currentHorizontalSpeed;
-    bool playEnabled = true;
+    private bool _playEnabled = true;
 
     // State Variables
     PlayerBaseState _currentState;
@@ -52,6 +52,7 @@ public class PlayerStateMachine : MonoBehaviour
     public Vector3 VerticalVelocity { get { return _verticalVelocity; } set { _verticalVelocity = value; } }
 
     public float CurrentHorizontalSpeed { get { return _currentHorizontalSpeed; } set { _currentHorizontalSpeed = value; } }
+    public bool PlayEnabled { get { return _playEnabled; } set { _playEnabled = value; } }
 
     public Vector3 ForwardDir { get { return _orientation.transform.forward; } }
     public Vector3 RightDir { get { return _orientation.transform.right; } }
@@ -102,6 +103,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void ChangePlayState()
     {
-        playEnabled = !playEnabled;
+        PlayEnabled = !PlayEnabled;
     }
 }
